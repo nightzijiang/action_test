@@ -1,0 +1,40 @@
+name: Build GUI Application
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  build:
+    runs-on: windows-latest  # 使用 Windows 虚拟机
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          pip install pyinstaller
+
+      - name: Run tests (optional)
+        run: |
+          echo "Running tests..."
+          # 如果有测试脚本，可以在这里运行
+          # pytest main.py
+
+      - name: Build EXE
+        run: |
+          pyinstaller --onefile --windowed main.py  # 打包为单文件 exe
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: gui-application
+          path: dist/main.exe  # 假设生成的 exe 文件在 dist 目录下
