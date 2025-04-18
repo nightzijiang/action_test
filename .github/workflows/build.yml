@@ -32,19 +32,18 @@ jobs:
           name: MyApp-Windows
           path: dist/main.exe
 
-  release:
+
+release:
     needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: write  # ✅ 关键权限
     steps:
-      - uses: actions/download-artifact@v4
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
         with:
-          name: app
-          
-      - name: Verify file exists
-        run: ls -la && test -f main.exe
-        
+          name: MyApp-Windows
+
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
