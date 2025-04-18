@@ -3,13 +3,12 @@ name: Build and Release GUI
 on:
   push:
     tags:
-      - "v*"  # 当推送类似 v1.0.0 的标签时触发
-  workflow_dispatch:  # 允许手动触发
+      - "v*"
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: windows-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -27,15 +26,17 @@ jobs:
         run: |
           pyinstaller --onefile --windowed main.py
 
-      - name: Upload Release Artifact
+      - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: MyApp-Windows
           path: dist/main.exe
 
   release:
-    needs: build  # 依赖 build 任务
+    needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # ✅ 关键权限
     steps:
       - name: Download Artifact
         uses: actions/download-artifact@v4
@@ -45,8 +46,5 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.ref_name }}  # 使用触发工作流的标签（如 v1.0.0）
-          files: |
-            main.exe  # 上传的文件名
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # 自动使用 GitHub Token
+          tag_name: ${{ github.ref_name }}
+          files: main.exe
