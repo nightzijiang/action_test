@@ -3,7 +3,7 @@ name: Build and Release GUI
 on:
   push:
     tags:
-      - "v*"
+      - "V*"
   workflow_dispatch:
 
 jobs:
