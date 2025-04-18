@@ -33,19 +33,19 @@ jobs:
           path: dist/main.exe
 
 
-release:
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write  # ✅ 关键权限
-    steps:
-      - name: Download Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: MyApp-Windows
+  release:
+      needs: build
+      runs-on: ubuntu-latest
+      permissions:
+        contents: write  # ✅ 关键权限
+      steps:
+        - name: Download Artifact
+          uses: actions/download-artifact@v4
+          with:
+            name: MyApp-Windows
 
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: ${{ github.ref_name }}
-          files: main.exe
+        - name: Create Release
+          uses: softprops/action-gh-release@v1
+          with:
+            tag_name: ${{ github.ref_name }}
+            files: main.exe
